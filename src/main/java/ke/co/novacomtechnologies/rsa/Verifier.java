@@ -2,7 +2,6 @@ package ke.co.novacomtechnologies.rsa;
 
 import org.bouncycastle.asn1.pkcs.RSAPublicKey;
 import org.bouncycastle.util.encoders.Base64;
-
 import javax.xml.bind.DatatypeConverter;
 import java.security.KeyFactory;
 import java.security.PublicKey;
