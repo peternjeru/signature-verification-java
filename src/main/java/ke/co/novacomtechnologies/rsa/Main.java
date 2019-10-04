@@ -23,7 +23,7 @@ public class Main
         app.jacksonVerifier();
     }
 
-    public void plainVerifier() throws Exception
+    public boolean plainVerifier() throws Exception
     {
         JSONObject jsonObject = new JSONObject(callbackRequest);
         String pkJsonString = jsonObject.getString("PublicKey");
@@ -50,9 +50,10 @@ public class Main
         boolean verified = verifier.verify(publicKey, data, signature);
 
         System.out.println("\nVerified: " + (verified == true ? "True" : "False"));
+        return verified;
     }
 
-    public void jacksonVerifier() throws Exception
+    public boolean jacksonVerifier() throws Exception
     {
         ObjectMapper objectMapper = new ObjectMapper();
         CallbackRequest request = objectMapper.readValue(callbackRequest, CallbackRequest.class);
@@ -80,5 +81,6 @@ public class Main
         boolean verified = verifier.verify(publicKey, data, signature);
 
         System.out.println("\nVerified: " + (verified == true ? "True" : "False"));
+        return verified;
     }
 }
