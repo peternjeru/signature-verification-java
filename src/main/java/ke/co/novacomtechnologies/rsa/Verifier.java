@@ -27,6 +27,6 @@ public class Verifier
         Signature sig = Signature.getInstance("SHA1withRSA");
         sig.initVerify(pk);
         sig.update(data.getBytes("UTF-8"));
-        return sig.verify(DatatypeConverter.parseHexBinary(signature));
+        return sig.verify(Base64.decode(signature));
     }
 }
