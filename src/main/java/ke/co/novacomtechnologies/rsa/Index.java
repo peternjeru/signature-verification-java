@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import java.security.PublicKey;
 import java.text.DecimalFormat;
 
-public class Main
+public class Index
 {
     private String callbackRequest = "{\"TransactionType\":\"CustomerPayBillConfirmation\"," +
             "\"TransactionTime\":\"20191008083205\"," +
@@ -24,18 +24,21 @@ public class Main
 
     public static void main(String args[]) throws Exception
     {
-        Main app = new Main();
+        Index app = new Index();
 
         //if you want to use plain JSON objects...
-        app.plainVerifier();
+        System.out.println("\n***Verify by plain JSON Objects***\n");
+        boolean verified = app.plainVerifier();
+        System.out.println("Verified: " + (verified == true ? "True" : "False"));
 
         //or using Jackson
-        app.jacksonVerifier();
+        System.out.println("\n***Verify by Jackson Pojo Objects***\n");
+        verified = app.jacksonVerifier();
+        System.out.println("Verified: " + (verified == true ? "True" : "False"));
     }
 
     public boolean plainVerifier() throws Exception
     {
-        System.out.println("\n***Verify by plain JSON Objects***\n");
         JSONObject jsonObject = new JSONObject(callbackRequest);
         String pkJsonString = jsonObject.getString("PublicKey");
         String pkString = pkJsonString
@@ -54,15 +57,12 @@ public class Main
         String signature = jsonObject.getString("Signature");
         Verifier verifier = new Verifier();
         PublicKey publicKey = verifier.getPublicKey(pkString);
-        boolean verified = verifier.verify(publicKey, data, signature);
 
-        System.out.println("Verified: " + (verified == true ? "True" : "False"));
-        return verified;
+        return verifier.verify(publicKey, data, signature);
     }
 
     public boolean jacksonVerifier() throws Exception
     {
-        System.out.println("\n***Verify by Jackson Pojo Objects***\n");
         ObjectMapper objectMapper = new ObjectMapper();
         CallbackRequest request = objectMapper.readValue(callbackRequest, CallbackRequest.class);
         String pkJsonString = request.getPublicKey();
@@ -82,9 +82,7 @@ public class Main
 
         Verifier verifier = new Verifier();
         PublicKey publicKey = verifier.getPublicKey(pkString);
-        boolean verified = verifier.verify(publicKey, data, signature);
 
-        System.out.println("Verified: " + (verified == true ? "True" : "False"));
-        return verified;
+        return verifier.verify(publicKey, data, signature);
     }
 }
